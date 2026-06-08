@@ -1,0 +1,52 @@
+:root {
+    /* ── Brand ── */
+    --primary:        #C8102E;
+    --primary-dark:   #a00d24;
+    --primary-glow:   rgba(200, 16, 46, 0.12);
+    --secondary:      #002868;
+    --secondary-light:#1a3d7c;
+
+    /* ── Aliases ── */
+    --red:        var(--primary);
+    --red-dark:   var(--primary-dark);
+    --navy:       var(--secondary);
+    --navy-light: var(--secondary-light);
+
+    /* ── Backgrounds ── */
+    --background:     #F7F3EC;
+    --cream:          #F7F3EC;
+    --warm:           #EDE5D0;
+    --surface:        #ffffff;
+    --surface-border: rgba(0, 0, 0, 0.06);
+
+    /* ── Text ── */
+    --text:       #0a0a0a;
+    --text-muted: #6b6459;
+    --muted:      #6b6459;
+
+    /* ── Inputs ── */
+    --input-bg:     #FAFAF8;
+    --input-border: rgba(0, 0, 0, 0.09);
+
+    /* ── Status ── */
+    --success: #34a853;
+    --warning: #f4b400;
+    --danger:  #d93025;
+
+    --sidebar-width: 260px;
+
+    /* ── Owner / Admin pages (Rhode navy theme) ── */
+    --bg:                 #F7F3EC;
+    --card:               #ffffff;
+    --card-hover:         #faf6f0;
+    --border:             rgba(0, 40, 104, 0.10);
+    --border-light:       rgba(0, 40, 104, 0.06);
+    --text-secondary:     #6b6459;
+    --shadow-sm:          0 2px 12px rgba(0, 0, 0, 0.06);
+    --shadow-md:          0 4px 24px rgba(0, 0, 0, 0.08);
+    --primary-hover:      #a00d24;
+    --primary-light:      rgba(200, 16, 46, 0.10);
+    --primary-very-light: rgba(200, 16, 46, 0.05);
+    --navy-surface:       rgba(0, 40, 104, 0.04);
+    --danger-hover:       #a00d24;
+}
