@@ -1,0 +1,14 @@
+{
+  "name": "unieats",
+  "version": "2.0.1",
+  "description": "UniEats - Campus Dining Platform",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "cd backend && npm run start",
+    "dev": "cd backend && npm run dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
+
