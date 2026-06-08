@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNIEats — Something Went Wrong</title>
+    <link rel="stylesheet" href="/styles/colors.css">
+    <style>
+        body { display:flex; align-items:center; justify-content:center; min-height:100vh; margin:0; background:var(--background); font-family:'DM Sans',sans-serif; }
+        .error-card { text-align:center; padding:60px 40px; max-width:520px; }
+        .error-code { font-size:7rem; font-weight:900; color:#f87171; line-height:1; margin-bottom:8px; }
+        .error-title { font-size:1.6rem; font-weight:800; margin-bottom:12px; color:var(--text); }
+        .error-sub { color:var(--text-muted); margin-bottom:28px; font-size:0.95rem; }
+        .error-btn { display:inline-block; padding:12px 28px; background:var(--primary); color:#fff; border-radius:12px; text-decoration:none; font-weight:700; font-size:0.95rem; transition:opacity 0.15s; }
+        .error-btn:hover { opacity:0.85; }
+        .error-stack { margin-top:28px; text-align:left; background:var(--surface); border:1px solid var(--surface-border); border-radius:10px; padding:16px; font-family:monospace; font-size:0.75rem; color:var(--text-muted); white-space:pre-wrap; word-break:break-all; max-height:200px; overflow-y:auto; }
+    </style>
+</head>
+<body>
+    <div class="error-card">
+        <div class="error-code"><%= statusCode %></div>
+        <div class="error-title">Something Went Wrong</div>
+        <p class="error-sub"><%= message %></p>
+        <a href="/" class="error-btn">← Back to Home</a>
+        <% if (stack) { %>
+        <pre class="error-stack"><%= stack %></pre>
+        <% } %>
+    </div>
+</body>
+</html>
