@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UNIEats — My Orders</title>
+  <link rel="stylesheet" href="/styles/colors.css">
+  <link rel="stylesheet" href="/styles/student.css">
+  
+  <style>
+    .orders-page { max-width: 760px; margin: 0 auto; padding: 100px 20px 60px; }
+    .orders-page h1 { font-size: 2rem; font-weight: 800; margin-bottom: 8px; }
+    .orders-page .subtitle { color: var(--text-muted); margin-bottom: 32px; font-size: 0.95rem; }
+
+    .order-card {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: 16px;
+      padding: 20px 24px;
+      margin-bottom: 16px;
+      transition: box-shadow 0.2s;
+    }
+    .order-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.15); }
+
+    .order-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+    .order-id { font-size: 0.78rem; color: var(--text-muted); font-family: monospace; }
+    .order-date { font-size: 0.82rem; color: var(--text-muted); }
+
+    .order-status {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .status-Pending    { background: rgba(245,158,11,0.15); color: #f59e0b; }
+    .status-Preparing  { background: rgba(99,102,241,0.15); color: #818cf8; }
+    .status-Ready      { background: rgba(16,185,129,0.15); color: #10b981; }
+    .status-Completed  { background: rgba(107,114,128,0.12); color: var(--text-muted); }
+
+    .order-items { margin: 10px 0; padding: 0; list-style: none; }
+    .order-items li { font-size: 0.88rem; color: var(--text-muted); padding: 2px 0; }
+    .order-items li::before { content: "· "; }
+
+    .order-card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid var(--surface-border);
+    }
+    .order-total { font-size: 1rem; font-weight: 700; }
+
+    .track-btn {
+      padding: 7px 18px;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.15s;
+    }
+    .track-btn:hover { opacity: 0.85; }
+    .track-btn.disabled { background: var(--surface-border); color: var(--text-muted); pointer-events: none; }
+
+    .empty-state {
+      text-align: center;
+      padding: 64px 20px;
+      color: var(--text-muted);
+    }
+    .empty-state .empty-icon { font-size: 3rem; margin-bottom: 12px; }
+    .empty-state p { margin-bottom: 20px; }
+    .empty-state a {
+      padding: 10px 24px;
+      background: var(--primary);
+      color: #fff;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .loading-skels { display: flex; flex-direction: column; gap: 16px; }
+    .skel-card { height: 120px; background: var(--surface); border: 1px solid var(--surface-border); border-radius: 16px; animation: shimmer 1.4s infinite; }
+    @keyframes shimmer { 0%,100%{opacity:1} 50%{opacity:0.5} }
+    .pagination {
+      display: flex; justify-content: center; align-items: center;
+      gap: 16px; margin-top: 28px; padding-bottom: 40px;
+    }
+    .pag-btn {
+      padding: 8px 20px; border-radius: 999px;
+      border: 1.5px solid var(--surface-border);
+      background: transparent; color: var(--text);
+      font-size: 0.85rem; font-weight: 600; cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .pag-btn:disabled { opacity: 0.4; cursor: default; }
+    .pag-info { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; }
+
+    .cancel-btn {
+      padding: 7px 18px;
+      background: rgba(217, 48, 37, 0.1);
+      color: #d93025;
+      border: 1px solid rgba(217, 48, 37, 0.2);
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .cancel-btn:hover { background: rgba(217, 48, 37, 0.2); }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar" id="navbar">
+    <a href="/student-home" class="nav-logo">UNIEats</a>
+    <div class="nav-links">
+      <a href="/student-home">Home</a>
+      <a href="/profile">Profile</a>
+      <a href="/orders" class="active">My Orders</a>
+      <a href="/cart" class="nav-cart-btn">🛒 Cart</a>
+      <a href="#" class="nav-logout" onclick="confirmLogout(event)">Logout</a>
+    </div>
+  </nav>
+
+  <div class="orders-page">
+    <h1>My Orders 🧾</h1>
+    <p class="subtitle">Track and review your recent orders.</p>
+    <div id="orders-container">
+      <div class="loading-skels">
+        <div class="skel-card"></div>
+        <div class="skel-card"></div>
+        <div class="skel-card"></div>
+      </div>
+    </div>
+    <div class="pagination" id="orders-pagination" style="display:none;">
+      <button class="pag-btn" id="pag-prev" onclick="changePage(-1)">← Prev</button>
+      <span class="pag-info" id="pag-info">Page 1</span>
+      <button class="pag-btn" id="pag-next" onclick="changePage(1)">Next →</button>
+    </div>
+  </div>
+
+  <script>
+    function confirmLogout(event) {
+      if (event) event.preventDefault();
+      window.location.href = '/logout-confirm';
+    }
+
+    window.addEventListener('scroll', () => {
+      document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 20);
+    });
+
+    function formatDate(iso) {
+      if (!iso) return '';
+      const d = new Date(iso);
+      return d.toLocaleDateString([], { day: 'numeric', month: 'short', year: 'numeric' }) +
+             ' · ' +
+             d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
+
+    function shortId(id) {
+      return id ? '…' + String(id).slice(-8) : '';
+    }
+
+    let currentPage = 1;
+    let totalPages  = 1;
+
+    function changePage(delta) {
+      const next = currentPage + delta;
+      if (next < 1 || next > totalPages) return;
+      loadOrders(next);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function updatePagination() {
+      const pag  = document.getElementById('orders-pagination');
+      const prev = document.getElementById('pag-prev');
+      const next = document.getElementById('pag-next');
+      const info = document.getElementById('pag-info');
+      if (totalPages <= 1) { pag.style.display = 'none'; return; }
+      pag.style.display   = 'flex';
+      info.textContent    = `Page ${currentPage} of ${totalPages}`;
+      prev.disabled       = currentPage <= 1;
+      next.disabled       = currentPage >= totalPages;
+    }
+
+    async function loadOrders(page = 1) {
+      const container = document.getElementById('orders-container');
+      const token = localStorage.getItem('token') || '';
+
+      if (!token) {
+        container.innerHTML = `<div class="empty-state">
+          <div class="empty-icon">🔒</div>
+          <p>Please log in to view your orders.</p>
+          <a href="/login">Log In</a>
+        </div>`;
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/orders?page=${page}&limit=5`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (!res.ok) {
+          container.innerHTML = `<div class="empty-state">
+            <div class="empty-icon">⚠️</div>
+            <p>Could not load orders. Please try again.</p>
+          </div>`;
+          return;
+        }
+
+        const data   = await res.json();
+        const orders = Array.isArray(data) ? data : (data.orders || []);
+        currentPage  = data.pagination?.page  || 1;
+        totalPages   = data.pagination?.pages || 1;
+
+        if (!orders.length) {
+          container.innerHTML = `<div class="empty-state">
+            <div class="empty-icon">🍽️</div>
+            <p>You haven't placed any orders yet.</p>
+            <a href="/student-home">Browse Restaurants</a>
+          </div>`;
+          updatePagination();
+          return;
+        }
+
+        container.innerHTML = orders.map(order => {
+          const isActive = ['Pending', 'Preparing', 'Ready'].includes(order.status);
+          const ageMs = Date.now() - new Date(order.createdAt).getTime();
+          const canCancel = order.status === 'Pending' && ageMs < 2 * 60 * 1000;
+          const trackBtn = isActive
+            ? `<a class="track-btn" href="/order-tracking" onclick="localStorage.setItem('lastOrderId','${order._id}')">Track Order</a>`
+            : `<span class="track-btn disabled">${order.status === 'Cancelled' ? 'Cancelled' : 'Completed'}</span>`;
+          const cancelBtn = canCancel
+            ? `<button class="cancel-btn" onclick="cancelOrder('${order._id}')">Cancel</button>`
+            : '';
+
+          const itemsList = (order.items || [])
+            .map(i => `<li>${i.name} ×${i.quantity || 1}</li>`)
+            .join('');
+
+          return `
+            <div class="order-card">
+              <div class="order-card-header">
+                <div>
+                  <div class="order-id">Order ${shortId(order._id)}</div>
+                  <div class="order-date">${formatDate(order.createdAt)}</div>
+                </div>
+                <span class="order-status status-${order.status}">${order.status}</span>
+              </div>
+              <ul class="order-items">${itemsList}</ul>
+              <div class="order-card-footer">
+                <span class="order-total">EGP ${parseFloat(order.total).toFixed(2)}</span>
+                <div style="display:flex;gap:8px;">
+                  ${trackBtn}
+                  ${cancelBtn}
+                </div>
+              </div>
+            </div>`;
+        }).join('');
+
+        updatePagination();
+
+      } catch (_) {
+        container.innerHTML = `<div class="empty-state">
+          <div class="empty-icon">⚠️</div>
+          <p>Network error. Please refresh.</p>
+        </div>`;
+      }
+    }
+    async function cancelOrder(id) {
+      if (!confirm('Cancel this order? This cannot be undone.')) return;
+      const token = localStorage.getItem('token') || '';
+      try {
+        const res = await fetch(`/api/orders/${id}/cancel`, {
+          method: 'DELETE',
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+        if (!res.ok) { alert(data.error || 'Could not cancel order.'); return; }
+        loadOrders(currentPage);
+      } catch (_) {
+        alert('Network error. Please try again.');
+      }
+    }
+
+    loadOrders();
+  </script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UNIEats — Manage Menu</title>
+
+<link rel="stylesheet" href="/styles/colors.css">
+<link rel="stylesheet" href="/styles/all-owner.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <a href="/owner-dashboard" class="back-arrow show" aria-label="Back to Dashboard">←</a>
+        <div class="links">
+            <a href="/owner-dashboard">Dashboard</a>
+            <a href="/manage-menu" class="active">Manage Menu</a>
+            <a href="/owner-orders">Orders</a>
+            <a href="#" onclick="confirmLogout(event)">Logout</a>
+        </div>
+    </nav>
+
+<div class="container">
+
+<main class="main">
+
+<h1>Manage Menu 🍔</h1>
+
+<div class="manage-menu-controls">
+    <div class="restaurant-info">
+        <span>Restaurant</span>
+        <strong id="restaurantName">Loading...</strong>
+    </div>
+</div>
+
+<div class="add-item-form">
+    <input id="itemName" placeholder="Item Name" class="form-input">
+    <input id="itemPrice" placeholder="Price (EGP)" type="number" class="form-input" min="0" step="0.01">
+    <input id="itemCategory" placeholder="Category" class="form-input">
+    <div class="image-upload-wrapper">
+        <label for="itemImage" class="image-upload-label">
+            <span>📷 Upload Image</span>
+            <input id="itemImage" type="file" accept="image/*" class="image-input">
+        </label>
+        <div id="imagePreview" class="image-preview"></div>
+    </div>
+    <button onclick="addItem()" class="btn btn-primary">Add Item</button>
+</div>
+
+<ul id="menuList" class="menu-list"></ul>
+
+</main>
+
+</div>
+
+<script src="/script/all-owner.js"></script>
+</body>
+</html>

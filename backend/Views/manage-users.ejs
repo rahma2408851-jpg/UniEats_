@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UNIEats — Manage Users</title>
+  <link rel="stylesheet" href="/styles/colors.css">
+  <link rel="stylesheet" href="/styles/admin.css">
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="/admin-dashboard" class="back-arrow" aria-label="Back to Dashboard">←</a>
+    <span class="nav-logo">UNIEats</span>
+    <div class="links">
+      <a href="/admin-dashboard">Dashboard</a>
+      <a href="/manage-restaurant">Restaurants</a>
+      <a href="/manage-users" class="active">Users</a>
+      <a href="/all-orders">Orders</a>
+      <a href="#" onclick="confirmLogout(event)">Logout</a>
+    </div>
+  </nav>
+
+  <div class="page-header">
+    <p class="eyebrow">Admin Panel</p>
+    <h1>Manage Users 👥</h1>
+    <p class="page-subtitle">View and remove registered accounts.</p>
+  </div>
+
+  <div class="container container-padded">
+
+    <input id="userSearchInput" class="admin-search"
+      placeholder="Search by name or email…" oninput="filterUsers()">
+
+    <div id="users">
+      <div class="mu-skels">
+        <div class="mu-skel" style="height:70px;border-radius:14px;"></div>
+        <div class="mu-skel" style="height:70px;border-radius:14px;"></div>
+        <div class="mu-skel" style="height:70px;border-radius:14px;"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    window._muAllUsers = [];
+
+    function filterUsers() {
+      const q = (document.getElementById('userSearchInput')?.value || '').toLowerCase();
+      const filtered = window._muAllUsers.filter(u =>
+        (u.name  || '').toLowerCase().includes(q) ||
+        (u.email || '').toLowerCase().includes(q)
+      );
+      renderUserCards(filtered);
+    }
+
+    function renderUserCards(users) {
+      const container = document.getElementById('users');
+      if (!users.length) {
+        container.innerHTML = '<div class="mu-empty">No users found.</div>';
+        return;
+      }
+      container.innerHTML = users.map(u => `
+        <div class="mu-user-card">
+          <div class="mu-user-info">
+            <span class="mu-user-name">${u.name || '—'}</span>
+            <span class="mu-user-email">${u.email}</span>
+            <span class="mu-user-id">ID: …${String(u._id).slice(-8)}</span>
+          </div>
+          <span class="mu-role-badge role-${u.role || 'student'}">${u.role || 'student'}</span>
+          <button class="mu-delete-btn" onclick="deleteUser('${u._id}')">Remove</button>
+        </div>`).join('');
+    }
+  </script>
+  <script src="/script/admin.js"></script>
+</body>
+</html>

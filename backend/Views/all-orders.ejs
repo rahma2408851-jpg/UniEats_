@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNIEats — All Orders</title>
+    <link rel="stylesheet" href="/styles/colors.css">
+    <link rel="stylesheet" href="/styles/admin.css">
+    <style>
+        .ao-page { max-width: 960px; margin: 0 auto; padding: 90px 20px 60px; }
+        .ao-header { margin-bottom: 24px; }
+        .ao-header h1 { font-size: 1.9rem; font-weight: 800; margin: 0 0 4px; }
+        .ao-header p  { color: var(--text-secondary); font-size: 0.9rem; margin: 0; }
+
+        /* ── Filter bar ── */
+        .ao-filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+        .ao-filter-btn {
+            padding: 6px 16px; border-radius: 999px;
+            border: 1.5px solid var(--border); background: transparent;
+            color: var(--text-secondary); font-size: 0.82rem; font-weight: 600;
+            cursor: pointer; transition: all 0.15s;
+        }
+        .ao-filter-btn:hover  { border-color: var(--primary); color: var(--text); }
+        .ao-filter-btn.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+
+        /* ── Table ── */
+        .ao-table-wrap { overflow-x: auto; border-radius: 14px; border: 1px solid var(--border); }
+        table { width: 100%; border-collapse: collapse; background: var(--card); }
+        thead { background: rgba(99,102,241,0.06); }
+        th { padding: 12px 16px; font-size: 0.76rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-secondary); text-align: left; border-bottom: 1px solid var(--border); }
+        td { padding: 13px 16px; font-size: 0.86rem; color: var(--text); border-bottom: 1px solid var(--border); vertical-align: middle; }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: rgba(255,255,255,0.02); }
+
+        .ao-id    { font-family: monospace; font-size: 0.78rem; color: var(--text-secondary); }
+        .ao-email { font-size: 0.82rem; color: var(--text-secondary); }
+        .ao-total { font-weight: 700; }
+
+        .ao-badge {
+            display: inline-block; padding: 3px 10px; border-radius: 999px;
+            font-size: 0.74rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+        }
+        .badge-Pending   { background: rgba(245,158,11,0.15);  color: #f59e0b; }
+        .badge-Preparing { background: rgba(129,140,248,0.15); color: #818cf8; }
+        .badge-Ready     { background: rgba(16,185,129,0.15);  color: #10b981; }
+        .badge-Completed { background: rgba(71,85,105,0.15);   color: #94a3b8; }
+
+        .ao-action-btn {
+            padding: 5px 12px; border-radius: 7px; border: none;
+            font-size: 0.78rem; font-weight: 700; cursor: pointer; transition: opacity 0.15s;
+        }
+        .ao-action-btn:hover { opacity: 0.8; }
+        .ao-action-btn.preparing { background: #6366f1; color: #fff; }
+        .ao-action-btn.ready     { background: #10b981; color: #fff; }
+        .ao-action-btn.done      { background: rgba(71,85,105,0.15); color: #94a3b8; cursor: default; }
+
+        .ao-empty { text-align: center; padding: 60px 20px; color: var(--text-secondary); }
+        .ao-skels { display: flex; flex-direction: column; gap: 0; border-radius: 14px; overflow: hidden; border: 1px solid var(--border); }
+        .ao-skel  { height: 52px; background: var(--card); border-bottom: 1px solid var(--border); animation: ao-shim 1.4s infinite; }
+        @keyframes ao-shim { 0%,100%{opacity:1} 50%{opacity:0.45} }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="/admin-dashboard" class="back-arrow" aria-label="Back to Dashboard">←</a>
+        <div class="links">
+            <a href="/admin-dashboard">Dashboard</a>
+            <a href="/manage-restaurant">Restaurants</a>
+           <a href="/manage-users">Users</a>
+            <a href="/all-orders" class="active">Orders</a>
+            <a href="#" onclick="confirmLogout(event)">Logout</a>
+        </div>
+    </nav>
+
+    <div class="ao-page">
+        <div class="ao-header">
+            <h1>All Orders 📋</h1>
+            <p>View and update every order across all restaurants.</p>
+        </div>
+
+        <div class="ao-filters">
+            <button class="ao-filter-btn active" onclick="setAoFilter('all', this)">All</button>
+            <button class="ao-filter-btn" onclick="setAoFilter('Pending', this)">Pending</button>
+            <button class="ao-filter-btn" onclick="setAoFilter('Preparing', this)">Preparing</button>
+            <button class="ao-filter-btn" onclick="setAoFilter('Ready', this)">Ready</button>
+            <button class="ao-filter-btn" onclick="setAoFilter('Completed', this)">Completed</button>
+        </div>
+
+        <div class="ao-table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Customer</th>
+                        <th>Items</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="all-orders-body">
+                    <tr><td colspan="7" style="padding:40px;text-align:center;color:var(--text-secondary);">Loading…</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        let _aoFilter = 'all';
+        let _aoOrders = [];
+
+        function setAoFilter(f, btn) {
+            _aoFilter = f;
+            document.querySelectorAll('.ao-filter-btn').forEach(b => b.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+            renderAoTable();
+        }
+
+        function renderAoTable() {
+            const tbody = document.getElementById('all-orders-body');
+            const orders = _aoFilter === 'all' ? _aoOrders : _aoOrders.filter(o => o.status === _aoFilter);
+            if (!orders.length) {
+                tbody.innerHTML = '<tr><td colspan="7" class="ao-empty">No orders in this category.</td></tr>';
+                return;
+            }
+            tbody.innerHTML = orders.map(o => {
+                const items = (o.items || []).map(i => `${i.name} ×${i.quantity || 1}`).join(', ');
+                const date  = o.createdAt ? new Date(o.createdAt).toLocaleDateString([], { day:'numeric', month:'short' }) : '—';
+                let action  = '';
+                if (o.status === 'Pending')   action = `<button class="ao-action-btn preparing" onclick="updateOrderStatus('${o._id}','Preparing')">→ Preparing</button>`;
+                else if (o.status === 'Preparing') action = `<button class="ao-action-btn ready"     onclick="updateOrderStatus('${o._id}','Ready')">→ Ready</button>`;
+                else                           action = `<button class="ao-action-btn done" disabled>Done</button>`;
+                return `<tr>
+                    <td class="ao-id">…${String(o._id).slice(-8)}</td>
+                    <td class="ao-email">${o.email || '—'}</td>
+                    <td style="max-width:200px;font-size:0.8rem;color:var(--text-secondary);">${items}</td>
+                    <td class="ao-total">EGP ${parseFloat(o.total || 0).toFixed(2)}</td>
+                    <td><span class="ao-badge badge-${o.status}">${o.status}</span></td>
+                    <td style="font-size:0.8rem;color:var(--text-secondary);">${date}</td>
+                    <td>${action}</td>
+                </tr>`;
+            }).join('');
+        }
+
+        /* admin.js exposes loadAllOrders — we hook into it after load */
+        window._aoHook = function(orders) {
+            _aoOrders = orders;
+            renderAoTable();
+        };
+    </script>
+    <script src="/script/admin.js"></script>
+</body>
+</html>

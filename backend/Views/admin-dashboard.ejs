@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UNIEats — Admin Dashboard</title>
+  <link rel="stylesheet" href="/styles/colors.css">
+  <link rel="stylesheet" href="/styles/admin.css">
+</head>
+<body>
+
+  <nav class="navbar">
+    <span class="nav-logo">UNIEats</span>
+    <div class="links">
+      <a href="/admin-dashboard" class="active">Dashboard</a>
+      <a href="/manage-restaurant">Restaurants</a>
+      <a href="/manage-users">Users</a>
+      <a href="/all-orders">Orders</a>
+      <a href="#" onclick="confirmLogout(event)">Logout</a>
+    </div>
+  </nav>
+
+  <!-- Page header -->
+  <div class="page-header">
+    <p class="eyebrow">Admin Panel</p>
+    <h1>Welcome back, Admin 👋</h1>
+    <p class="page-subtitle">Manage restaurants, users, orders and owner assignments.</p>
+  </div>
+
+  <!-- Stat cards -->
+  <div class="container">
+    <div class="stats-grid">
+      <div class="card stat-card">
+        <div class="card-label">Total Restaurants</div>
+        <b id="resCount">—</b>
+        <button onclick="window.location.href='/manage-restaurant'">Manage</button>
+      </div>
+      <div class="card stat-card">
+        <div class="card-label">Total Users</div>
+        <b id="userCount">—</b>
+        <button onclick="window.location.href='/manage-users'">Manage</button>
+      </div>
+      <div class="card stat-card">
+        <div class="card-label">Total Orders</div>
+        <b id="orderCount">—</b>
+        <button onclick="window.location.href='/all-orders'">View All</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Owner assignment card -->
+  <div class="container container-padded" style="margin-top:24px;">
+    <div class="card assign-card">
+
+      <div class="section-header">
+        <p class="eyebrow">Owner Mapping</p>
+        <h3>Assign Owner to Restaurants</h3>
+        <p class="section-meta">Only admins can create and edit these assignments.</p>
+      </div>
+
+      <div class="form-grid">
+        <label class="input-group">
+          <span>Owner Email</span>
+          <input id="ownerEmail" placeholder="owner@restaurant.com">
+        </label>
+        <label class="select-group">
+          <span>Select Restaurants</span>
+          <select id="restaurantsSelect" multiple></select>
+        </label>
+        <div class="form-actions">
+          <button class="small" onclick="assignOwner()">Assign</button>
+        </div>
+      </div>
+
+      <div class="assign-table-header">
+        <div>
+          <h4>Current Assignments</h4>
+          <p class="section-meta">Search or edit existing owner mappings.</p>
+        </div>
+        <div class="inline-actions">
+          <input id="ownerSearch" placeholder="Search by email…">
+          <button class="small" onclick="renderOwnerMappings()">Refresh</button>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table id="ownerMappingsTable">
+          <thead>
+            <tr>
+              <th>Owner Email</th>
+              <th>Restaurants</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="/script/admin.js"></script>
+</body>
+</html>

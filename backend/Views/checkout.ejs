@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNIEats - Checkout</title>
+    <link rel="stylesheet" href="/styles/colors.css">
+    <link rel="stylesheet" href="/styles/global.css">
+    <link rel="stylesheet" href="/styles/student.css">
+    <style>
+        /* ── Loyalty banner ── */
+        #loyalty-banner {
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(99,102,241,0.08);
+            border: 1px solid rgba(99,102,241,0.25);
+            border-radius: 12px;
+            padding: 12px 18px;
+            margin-bottom: 18px;
+            font-size: 0.9rem;
+        }
+        #loyalty-banner .lb-label { color: var(--text-muted); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+        #loyalty-balance { font-size: 1.1rem; font-weight: 800; color: var(--primary); }
+        #loyalty-earn-preview { font-size: 0.85rem; color: #6ee7b7; font-weight: 700; }
+
+        /* ── Pickup chips ── */
+        .pickup-section { margin: 18px 0; }
+        .pickup-section label { display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 10px; }
+        .pickup-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+        .pickup-chip {
+            padding: 8px 14px; border-radius: 999px; border: 1px solid var(--surface-border);
+            background: transparent; color: var(--text); font-size: 0.85rem; cursor: pointer;
+            transition: all 0.18s;
+        }
+        .pickup-chip.selected, .pickup-chip:hover {
+            background: var(--primary); border-color: var(--primary); color: #fff;
+        }
+        #custom-time-wrap { display: none; margin-top: 10px; }
+        #custom-time-wrap.visible { display: block; }
+        #custom-time {
+            padding: 8px 12px; border-radius: 8px;
+            border: 1px solid var(--surface-border); background: var(--surface); color: var(--text);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="/cart" class="back-arrow show" aria-label="Back to Cart">←</a>
+        <div class="links">
+            <a href="/student-home">Home</a>
+            <a href="/cart">Cart</a>
+            <a href="/profile">Profile</a>
+            <a href="#" onclick="confirmLogout(event)">Logout</a>
+        </div>
+    </nav>
+
+    <h1 class="checkout-title">Checkout</h1>
+
+    <div class="container checkout-container">
+
+        <!-- Loyalty banner -->
+        <div id="loyalty-banner">
+            <div>
+                <div class="lb-label">Your Balance</div>
+                <div id="loyalty-balance">0 pts</div>
+            </div>
+            <div id="loyalty-earn-preview" title="Points you'll earn on this order"></div>
+        </div>
+
+        <ul id="orderList"></ul>
+        <h3 class="checkout-total">Total: <span id="total"></span> <span id="usd-equiv" style="font-size:0.8rem;color:var(--text-muted);font-weight:400;"></span></h3>
+
+        <!-- Pickup time -->
+        <div class="pickup-section">
+            <label>Pickup time</label>
+            <div class="pickup-chips">
+                <button class="pickup-chip selected" data-value="asap"   onclick="selectPickup(this)">ASAP</button>
+                <button class="pickup-chip"          data-value="15"     onclick="selectPickup(this)">15 min</button>
+                <button class="pickup-chip"          data-value="30"     onclick="selectPickup(this)">30 min</button>
+                <button class="pickup-chip"          data-value="custom" onclick="selectPickup(this)">Custom</button>
+            </div>
+            <div id="custom-time-wrap">
+                <input type="time" id="custom-time">
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label for="orderComment">Special Instructions (optional)</label>
+            <textarea id="orderComment" class="order-comment" placeholder="e.g. add extra ranch sauce, no onions…" rows="3" maxlength="200"></textarea>
+        </div>
+
+        <button class="checkout-btn" onclick="placeOrder()">Place Order</button>
+    </div>
+
+    <footer class="sh-footer">
+        <a href="/student-home" class="sh-footer-logo">UNIEats</a>
+        <span class="sh-footer-copy">Campus Dining Platform · 2026</span>
+    </footer>
+
+    <div id="toast-container"></div>
+    <script src="/script/checkout.js"></script>
+</body>
+</html>
