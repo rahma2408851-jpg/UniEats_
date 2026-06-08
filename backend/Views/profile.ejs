@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNIEats — My Profile</title>
+    <!-- Only student.css — it defines the color theme. global.css conflicts. -->
+    <link rel="stylesheet" href="/styles/colors.css">
+    <link rel="stylesheet" href="/styles/student.css">
+    <style>
+        /* ── Profile page layout ── */
+        .profile-page {
+            max-width: 540px;
+            margin: 0 auto;
+            padding: 100px 20px 60px;
+        }
+
+        .profile-page h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+
+        .profile-subtitle {
+            color: var(--text-muted);
+            font-size: 0.92rem;
+            margin-bottom: 32px;
+        }
+
+        /* ── Loyalty card ── */
+        .loyalty-card {
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(200, 16, 46, 0.06);
+            border: 1px solid rgba(200, 16, 46, 0.2);
+            border-radius: 14px;
+            padding: 18px 22px;
+            margin-bottom: 24px;
+        }
+
+        .loyalty-card.visible { display: flex; }
+
+        .loyalty-label {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .loyalty-balance {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary);
+            line-height: 1;
+        }
+
+        .loyalty-hint {
+            text-align: right;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            max-width: 180px;
+        }
+
+        /* ── Avatar ── */
+        .avatar-section {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            margin-bottom: 28px;
+        }
+
+        .avatar-wrapper {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            flex-shrink: 0;
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--surface-border, rgba(0,0,0,0.1));
+        }
+
+        .avatar-upload-btn {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: #fff;
+            border: 2px solid var(--background, #fff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            cursor: pointer;
+        }
+
+        /* Hide the raw file input */
+        #profilePic { display: none; }
+
+        .avatar-hint {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+        }
+
+        /* ── Form card ── */
+        .profile-form-card {
+            background: var(--surface, #fff);
+            border: 1px solid var(--surface-border, rgba(0,0,0,0.07));
+            border-radius: 16px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .profile-field label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        .profile-field input {
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: 10px;
+            border: 1px solid var(--surface-border, rgba(0,0,0,0.09));
+            background: var(--input-bg, #fafaf8);
+            color: var(--text);
+            font-size: 0.95rem;
+            margin: 0;
+        }
+
+        .profile-save-btn {
+            padding: 12px;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: opacity 0.15s;
+        }
+
+        .profile-save-btn:hover { opacity: 0.88; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar" id="navbar">
+        <a href="/student-home" class="nav-logo">UNIEats</a>
+        <div class="nav-links">
+            <a href="/student-home">Home</a>
+            <a href="/profile" class="active">Profile</a>
+            <a href="/orders">My Orders</a>
+            <a href="/cart" class="nav-cart-btn">🛒 Cart</a>
+            <a href="#" class="nav-logout" onclick="confirmLogout(event)">Logout</a>
+        </div>
+    </nav>
+
+    <div class="profile-page">
+
+        <h1>My Profile</h1>
+        <p class="profile-subtitle">Manage your account details and preferences.</p>
+
+        <!-- Loyalty card -->
+        <div id="loyalty-card" class="loyalty-card">
+            <div>
+                <div class="loyalty-label">Loyalty Points</div>
+                <div id="profile-loyalty-balance" class="loyalty-balance">0 pts</div>
+            </div>
+            <div class="loyalty-hint">Earn 1 point per EGP spent. Redeem for discounts soon.</div>
+        </div>
+
+        <!-- Avatar -->
+        <div class="avatar-section">
+            <div class="avatar-wrapper">
+                <img id="profilePreview" class="profile-avatar" alt="Profile picture">
+                <label for="profilePic" class="avatar-upload-btn" title="Upload photo">📷</label>
+                <input type="file" id="profilePic" accept="image/*" onchange="previewProfilePic()">
+            </div>
+            <div class="avatar-hint">Click the camera icon to update your photo.</div>
+        </div>
+
+        <!-- Form -->
+        <div class="profile-form-card">
+            <div class="profile-field">
+                <label for="name">Display Name</label>
+                <input id="name" type="text" placeholder="Your name">
+            </div>
+            <div class="profile-field">
+                <label for="email">Email Address</label>
+                <input id="email" type="email" placeholder="name@example.com">
+            </div>
+            <button class="profile-save-btn" onclick="saveProfile()">Save Changes</button>
+        </div>
+
+    </div>
+
+    <div id="toast-container"></div>
+
+    <script>
+        function confirmLogout(event) {
+            if (event) event.preventDefault();
+            window.location.href = '/logout-confirm';
+        }
+
+        window.addEventListener('scroll', () => {
+            document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 20);
+        });
+
+        async function loadProfileLoyalty() {
+            const email = localStorage.getItem("userEmail");
+            if (!email || email === "guest") return;
+            try {
+                const res = await fetch(`/api/users/loyalty/${encodeURIComponent(email)}`, {
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token') || ''}` }
+                });
+                if (!res.ok) return;
+                const data = await res.json();
+                const card = document.getElementById("loyalty-card");
+                const bal  = document.getElementById("profile-loyalty-balance");
+                if (card && bal) {
+                    bal.textContent = data.loyaltyPoints.toLocaleString() + " pts";
+                    card.classList.add("visible");
+                }
+            } catch (_) {}
+        }
+
+        window.addEventListener("DOMContentLoaded", loadProfileLoyalty);
+    </script>
+
+    <script src="/script/profile.js"></script>
+
+</body>
+</html>

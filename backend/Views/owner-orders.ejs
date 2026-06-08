@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UNIEats — Manage Orders</title>
+  <link rel="stylesheet" href="/styles/colors.css">
+  <link rel="stylesheet" href="/styles/all-owner.css">
+  <style>
+    /* ── Stats ── */
+    .oo-stats {
+      display: grid; grid-template-columns: repeat(3,1fr);
+      gap: 16px; margin-bottom: 28px;
+    }
+    .oo-stat {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 16px; padding: 20px 22px;
+      box-shadow: var(--shadow-sm); transition: all 0.2s;
+    }
+    .oo-stat:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+    .oo-stat-label {
+      font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 8px;
+    }
+    .oo-stat-value {
+      font-size: 2.2rem; font-weight: 900; line-height: 1;
+    }
+    .pending-col  { color: #b45309; }
+    .prep-col     { color: var(--secondary); }
+    .ready-col    { color: #166534; }
+
+    /* ── Filter tabs ── */
+    .oo-tabs {
+      display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap;
+    }
+    .oo-tab {
+      padding: 7px 18px; border-radius: 999px;
+      border: 1.5px solid var(--border); background: transparent;
+      color: var(--text-muted); font-size: 0.82rem; font-weight: 600;
+      cursor: pointer; transition: all 0.15s; font-family: inherit;
+    }
+    .oo-tab:hover { border-color: var(--secondary); color: var(--secondary); }
+    .oo-tab.active {
+      background: var(--secondary); border-color: var(--secondary); color: #fff;
+    }
+
+    /* ── Refresh bar ── */
+    .oo-refresh-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 20px; font-size: 0.8rem; color: var(--text-muted);
+    }
+    .oo-refresh-dot {
+      display: inline-block; width: 7px; height: 7px; border-radius: 50%;
+      background: #166534; margin-right: 6px; animation: pulse 2s infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    .oo-refresh-btn {
+      padding: 5px 14px; border-radius: 7px;
+      border: 1px solid var(--border); background: var(--surface);
+      color: var(--text-muted); font-size: 0.78rem; font-weight: 600;
+      cursor: pointer; transition: all 0.15s; font-family: inherit;
+    }
+    .oo-refresh-btn:hover {
+      border-color: var(--secondary); color: var(--secondary);
+      transform: none; box-shadow: none;
+    }
+
+    /* ── Order cards ── */
+    .oo-list { display: flex; flex-direction: column; gap: 14px; }
+
+    .oo-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 18px; padding: 20px 24px;
+      box-shadow: var(--shadow-sm); transition: all 0.2s;
+    }
+    .oo-card:hover { box-shadow: var(--shadow-md); }
+    .oo-card.border-pending   { border-left: 4px solid #b45309; }
+    .oo-card.border-preparing { border-left: 4px solid var(--secondary); }
+    .oo-card.border-ready     { border-left: 4px solid #166534; }
+    .oo-card.border-completed { border-left: 4px solid var(--text-muted); }
+
+    .oo-card-top {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      margin-bottom: 12px; flex-wrap: wrap; gap: 8px;
+    }
+    .oo-order-id {
+      font-family: monospace; font-size: 0.78rem; color: var(--text-muted);
+    }
+    .oo-order-time { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
+
+    .oo-customer {
+      font-size: 0.84rem; color: var(--text-muted); margin-bottom: 10px;
+    }
+    .oo-customer strong { color: var(--text); }
+
+    .oo-items {
+      list-style: none; margin: 0 0 14px; padding: 0;
+      display: flex; flex-direction: column; gap: 3px;
+    }
+    .oo-items li {
+      font-size: 0.86rem; color: var(--text-muted); padding: 2px 0;
+    }
+    .oo-items li::before { content: "· "; color: var(--primary); }
+
+    .oo-comment {
+      font-size: 0.83rem; color: var(--text-muted);
+      background: rgba(0,40,104,0.04); border: 1px solid rgba(0,40,104,0.10);
+      border-radius: 8px; padding: 8px 12px; margin-bottom: 14px;
+    }
+    .oo-comment strong { color: var(--secondary); }
+
+    .oo-card-footer {
+      display: flex; justify-content: space-between; align-items: center;
+      padding-top: 14px; border-top: 1px solid var(--border);
+      flex-wrap: wrap; gap: 10px;
+    }
+    .oo-total { font-size: 1.05rem; font-weight: 800; color: var(--primary); }
+
+    .oo-actions { display: flex; gap: 8px; }
+    .oo-btn {
+      padding: 8px 18px; border-radius: 9px; border: none;
+      font-size: 0.82rem; font-weight: 700; cursor: pointer;
+      transition: all 0.15s; font-family: inherit;
+    }
+    .oo-btn.accept {
+      background: var(--secondary); color: #fff;
+    }
+    .oo-btn.accept:hover { background: var(--secondary-light); transform: none; box-shadow: none; }
+    .oo-btn.ready {
+      background: rgba(22,101,52,0.12); color: #166534;
+      border: 1px solid rgba(22,101,52,0.2);
+    }
+    .oo-btn.ready:hover { background: #166534; color: #fff; transform: none; box-shadow: none; }
+    .oo-btn.done-label {
+      background: var(--warm); color: var(--text-muted); cursor: default;
+    }
+
+    /* ── Skeletons ── */
+    .oo-skels { display: flex; flex-direction: column; gap: 14px; }
+    .oo-skel {
+      height: 130px; background: var(--surface);
+      border: 1px solid var(--border); border-radius: 18px;
+      animation: shimmer 1.4s infinite;
+    }
+    @keyframes shimmer { 0%,100%{opacity:1} 50%{opacity:0.5} }
+
+    /* ── Empty ── */
+    .oo-empty {
+      text-align: center; padding: 60px 20px; color: var(--text-muted);
+      background: var(--surface); border: 1.5px dashed var(--border);
+      border-radius: 18px;
+    }
+    .oo-empty-icon { font-size: 2.8rem; margin-bottom: 10px; }
+
+    @media (max-width: 500px) {
+      .oo-stats { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="/owner-dashboard" class="back-arrow" aria-label="Back to Dashboard">←</a>
+    <span class="nav-logo">UNIEats</span>
+    <div class="links">
+      <a href="/owner-dashboard">Dashboard</a>
+      <a href="/manage-menu">Manage Menu</a>
+      <a href="/owner-orders" class="active">Orders</a>
+      <a href="#" onclick="confirmLogout(event)">Logout</a>
+    </div>
+  </nav>
+
+  <div class="oo-page">
+
+    <div class="page-header">
+      <div class="page-eyebrow">Owner Panel</div>
+      <h1 class="page-title">Incoming Orders 🧾</h1>
+      <p class="page-sub">Accept, prepare, and mark orders ready for pickup.</p>
+    </div>
+
+    <!-- Stats -->
+    <div class="oo-stats">
+      <div class="oo-stat">
+        <div class="oo-stat-label">Pending</div>
+        <div class="oo-stat-value pending-col" id="stat-pending">—</div>
+      </div>
+      <div class="oo-stat">
+        <div class="oo-stat-label">Preparing</div>
+        <div class="oo-stat-value prep-col" id="stat-preparing">—</div>
+      </div>
+      <div class="oo-stat">
+        <div class="oo-stat-label">Ready</div>
+        <div class="oo-stat-value ready-col" id="stat-ready">—</div>
+      </div>
+    </div>
+
+    <!-- Filter tabs -->
+    <div class="oo-tabs">
+      <button class="oo-tab active" onclick="setFilter('active',this)">Active</button>
+      <button class="oo-tab" onclick="setFilter('Pending',this)">Pending</button>
+      <button class="oo-tab" onclick="setFilter('Preparing',this)">Preparing</button>
+      <button class="oo-tab" onclick="setFilter('Ready',this)">Ready</button>
+      <button class="oo-tab" onclick="setFilter('Completed',this)">Completed</button>
+      <button class="oo-tab" onclick="setFilter('all',this)">All</button>
+    </div>
+
+    <!-- Refresh bar -->
+    <div class="oo-refresh-bar">
+      <span><span class="oo-refresh-dot"></span>Live — updates every 20 seconds</span>
+      <button class="oo-refresh-btn" onclick="loadOrders()">↻ Refresh now</button>
+    </div>
+
+    <!-- Orders list -->
+    <div id="oo-list">
+      <div class="oo-skels">
+        <div class="oo-skel"></div>
+        <div class="oo-skel"></div>
+        <div class="oo-skel"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    function confirmLogout(e) {
+      if (e) e.preventDefault();
+      window.location.href = '/logout-confirm';
+    }
+
+    function escHtml(s) {
+      return String(s)
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function formatTime(iso) {
+      if (!iso) return '';
+      const d = new Date(iso);
+      return d.toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' }) +
+             ' · ' + d.toLocaleDateString([], { day:'numeric', month:'short' });
+    }
+
+    function shortId(id) { return '…' + String(id).slice(-8); }
+    function token() { return localStorage.getItem('token') || ''; }
+
+    async function apiGet(path) {
+      const r = await fetch('/api' + path, {
+        headers: { Authorization: `Bearer ${token()}` }
+      });
+      if (!r.ok) throw new Error(await r.text());
+      return r.json();
+    }
+
+    async function apiPatch(path, body) {
+      const r = await fetch('/api' + path, {
+        method: 'PATCH',
+        headers: { 'Content-Type':'application/json', Authorization:`Bearer ${token()}` },
+        body: JSON.stringify(body)
+      });
+      if (!r.ok) throw new Error(await r.text());
+      return r.json();
+    }
+
+    let allOrders = [];
+    let currentFilter = 'active';
+
+    function setFilter(f, btn) {
+      currentFilter = f;
+      document.querySelectorAll('.oo-tab').forEach(t => t.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      renderList();
+    }
+
+    function filteredOrders() {
+      if (currentFilter === 'all')    return allOrders;
+      if (currentFilter === 'active') return allOrders.filter(o =>
+        ['Pending','Preparing','Ready'].includes(o.status));
+      return allOrders.filter(o => o.status === currentFilter);
+    }
+
+    function updateStats() {
+      document.getElementById('stat-pending').textContent   = allOrders.filter(o => o.status === 'Pending').length;
+      document.getElementById('stat-preparing').textContent = allOrders.filter(o => o.status === 'Preparing').length;
+      document.getElementById('stat-ready').textContent     = allOrders.filter(o => o.status === 'Ready').length;
+    }
+
+    function renderList() {
+      const container = document.getElementById('oo-list');
+      const orders = filteredOrders();
+
+      if (!orders.length) {
+        container.innerHTML = `<div class="oo-empty">
+          <div class="oo-empty-icon">🍽️</div>
+          <p>No orders in this category right now.</p>
+        </div>`;
+        return;
+      }
+
+      container.innerHTML = `<div class="oo-list">${orders.map(o => {
+        const borderClass = `border-${o.status.toLowerCase()}`;
+        const items = (o.items || []).map(i =>
+          `<li>${escHtml(i.name)} ×${i.quantity || i.qty || 1}</li>`).join('');
+        const comment = o.comment?.trim()
+          ? `<div class="oo-comment"><strong>Note:</strong> ${escHtml(o.comment)}</div>` : '';
+
+        let actions = '';
+        if (o.status === 'Pending') {
+          actions = `<div class="oo-actions">
+            <button class="oo-btn accept" onclick="acceptOrder('${o._id}')">✓ Accept</button>
+          </div>`;
+        } else if (o.status === 'Preparing') {
+          actions = `<div class="oo-actions">
+            <button class="oo-btn ready" onclick="markReady('${o._id}')">🔔 Mark Ready</button>
+          </div>`;
+        } else if (o.status === 'Ready') {
+          actions = `<div class="oo-actions">
+            <span class="oo-btn done-label">Awaiting pickup</span>
+          </div>`;
+        } else {
+          actions = `<div class="oo-actions">
+            <span class="oo-btn done-label">Completed</span>
+          </div>`;
+        }
+
+        return `
+          <div class="oo-card ${borderClass}">
+            <div class="oo-card-top">
+              <div>
+                <div class="oo-order-id">Order ${shortId(o._id)}</div>
+                <div class="oo-order-time">${formatTime(o.createdAt)}</div>
+              </div>
+              <span class="oo-badge ${o.status}">${o.status}</span>
+            </div>
+            <div class="oo-customer"><strong>Customer:</strong> ${escHtml(o.email)}</div>
+            <ul class="oo-items">${items}</ul>
+            ${comment}
+            <div class="oo-card-footer">
+              <span class="oo-total">EGP ${parseFloat(o.total).toFixed(2)}</span>
+              ${actions}
+            </div>
+          </div>`;
+      }).join('')}</div>`;
+    }
+
+    async function loadOrders() {
+      try {
+        const orders = await apiGet('/orders');
+        allOrders = orders;
+        updateStats();
+        renderList();
+      } catch (err) {
+        document.getElementById('oo-list').innerHTML = `<div class="oo-empty">
+          <div class="oo-empty-icon">⚠️</div>
+          <p>Could not load orders. Are you logged in as an owner?</p>
+        </div>`;
+      }
+    }
+
+    async function acceptOrder(id) {
+      try {
+        await apiPatch(`/orders/${id}`, { status: 'Preparing' });
+        await loadOrders();
+      } catch (_) { alert('Failed to accept order.'); }
+    }
+
+    async function markReady(id) {
+      try {
+        await apiPatch(`/orders/${id}`, { status: 'Ready' });
+        await loadOrders();
+      } catch (_) { alert('Failed to mark order as ready.'); }
+    }
+
+    loadOrders();
+    setInterval(loadOrders, 20000);
+  </script>
+
+</body>
+</html>

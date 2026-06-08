@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNIEats — Page Not Found</title>
+    <link rel="stylesheet" href="/styles/colors.css">
+    <style>
+        body { display:flex; align-items:center; justify-content:center; min-height:100vh; margin:0; background:var(--background); font-family:'DM Sans',sans-serif; }
+        .error-card { text-align:center; padding:60px 40px; max-width:480px; }
+        .error-code { font-size:7rem; font-weight:900; color:var(--primary); line-height:1; margin-bottom:8px; }
+        .error-title { font-size:1.6rem; font-weight:800; margin-bottom:12px; color:var(--text); }
+        .error-sub { color:var(--text-muted); margin-bottom:32px; font-size:0.95rem; }
+        .error-url { font-family:monospace; font-size:0.82rem; color:var(--text-muted); background:var(--surface); padding:6px 14px; border-radius:8px; display:inline-block; margin-bottom:28px; }
+        .error-btn { display:inline-block; padding:12px 28px; background:var(--primary); color:#fff; border-radius:12px; text-decoration:none; font-weight:700; font-size:0.95rem; transition:opacity 0.15s; }
+        .error-btn:hover { opacity:0.85; }
+    </style>
+</head>
+<body>
+    <div class="error-card">
+        <div class="error-code">404</div>
+        <div class="error-title">Page Not Found</div>
+        <p class="error-sub">The page you're looking for doesn't exist or has been moved.</p>
+        <div class="error-url"><%= url %></div>
+        <br>
+        <a href="/" class="error-btn">← Back to Home</a>
+    </div>
+</body>
+</html>

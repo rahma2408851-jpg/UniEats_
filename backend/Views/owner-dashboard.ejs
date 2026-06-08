@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UNIEats — Owner Dashboard</title>
+<link rel="stylesheet" href="/styles/colors.css">
+<link rel="stylesheet" href="/styles/all-owner.css">
+</head>
+
+<body>
+  <nav class="navbar">
+    <span class="nav-logo">UNIEats</span>
+    <div class="links">
+      <a href="/owner-dashboard" class="active">Dashboard</a>
+      <a href="/manage-menu">Manage Menu</a>
+      <a href="/owner-orders">Orders</a>
+      <a href="#" onclick="confirmLogout(event)">Logout</a>
+    </div>
+  </nav>
+
+  <div class="main">
+
+    <!-- Header -->
+    <div class="page-header">
+      <div class="page-eyebrow">Owner Panel</div>
+      <h1 class="page-title" id="dashGreeting">Welcome back 👋</h1>
+      <p class="page-sub">Here's what's happening at your restaurant today.</p>
+    </div>
+
+    <!-- Restaurant info strip -->
+    <div class="restaurant-badge">
+      <span>Your Restaurant</span>
+      <strong id="restaurantName">Loading…</strong>
+    </div>
+
+    <!-- Stat cards -->
+    <div class="stats">
+      <div class="card">
+        <h3>Total Orders</h3>
+        <p id="totalOrders">—</p>
+        <button onclick="window.location.href='/owner-orders'">View Orders</button>
+      </div>
+      <div class="card">
+        <h3>Pending</h3>
+        <p id="pendingOrders">—</p>
+        <button onclick="window.location.href='/owner-orders'">Manage</button>
+      </div>
+      <div class="card">
+        <h3>Completed</h3>
+        <p id="completedOrders">—</p>
+        <button onclick="window.location.href='/owner-orders'">View All</button>
+      </div>
+    </div>
+
+    <!-- Quick actions -->
+    <div class="section-title">Quick Actions</div>
+    <div class="quick-actions-grid">
+
+      <a href="/manage-menu" style="text-decoration:none;">
+        <div class="quick-card">
+          <div class="quick-icon">🍔</div>
+          <div class="quick-label">Manage Menu</div>
+          <div class="quick-sub">Add or remove items</div>
+        </div>
+      </a>
+
+      <a href="/owner-orders" style="text-decoration:none;">
+        <div class="quick-card">
+          <div class="quick-icon">🧾</div>
+          <div class="quick-label">View Orders</div>
+          <div class="quick-sub">Accept and prepare orders</div>
+        </div>
+      </a>
+
+      <a href="/profile" style="text-decoration:none;">
+        <div class="quick-card">
+          <div class="quick-icon">👤</div>
+          <div class="quick-label">My Profile</div>
+          <div class="quick-sub">Update your account</div>
+        </div>
+      </a>
+
+    </div>
+
+  </div>
+
+  <style>
+    .quick-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px 20px;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .quick-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+      border-color: rgba(0,40,104,0.2);
+    }
+    .quick-icon {
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+    }
+    .quick-label {
+      font-size: 0.97rem;
+      font-weight: 800;
+      color: var(--secondary);
+      margin-bottom: 4px;
+    }
+    .quick-sub {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+  </style>
+
+  <script src="/script/all-owner.js"></script>
+  <script>
+    /* Personalise greeting from localStorage */
+    const name = localStorage.getItem('userName') || '';
+    const first = name.split(' ')[0];
+    const hour  = new Date().getHours();
+    let label = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+    const el = document.getElementById('dashGreeting');
+    if (el) el.textContent = first ? `${label}, ${first} 👋` : `${label} 👋`;
+  </script>
+</body>
+</html>
