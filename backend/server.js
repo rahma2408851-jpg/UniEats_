@@ -86,7 +86,7 @@ connectDB().then(() => {
   // Static Files (CSS, JS, assets)
   // ─────────────────────────────────────────────
 
-  app.use(express.static(path.join(__dirname, '..')));
+  app.use(express.static(path.join(__dirname)));
   // Serve uploaded files (menu images, profile pictures)
   app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 
