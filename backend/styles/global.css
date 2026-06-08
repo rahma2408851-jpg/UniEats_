@@ -1,0 +1,153 @@
+:root {
+    /* Brand Colors - UNIEats Navy & Red */
+    --primary:       #C8102E;
+    --primary-dark:  #a00d24;
+    --primary-glow:  rgba(200, 16, 46, 0.12);
+    --secondary:     #002868;
+    --secondary-light: #1a3d7c;
+
+    --background:    #0f172a;
+    --surface:       rgba(30, 41, 59, 0.6);
+    --surface-border: rgba(255, 255, 255, 0.08);
+
+    /* Text */
+    --text:          #f8fafc;
+    --text-muted:    #94a3b8;
+
+    /* Status */
+    --success:       #10b981;
+    --warning:       #f59e0b;
+    --danger:        #ef4444;
+
+    --sidebar-width: 260px;
+}
+
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: var(--background);
+    color: var(--text);
+}
+
+/* ── Navbar (shared, single definition) ── */
+.navbar {
+    background: var(--surface);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--surface-border);
+    padding: 12px 20px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    height: 64px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.navbar + * {
+    padding-top: 80px;
+}
+
+.navbar .back-arrow {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    margin-right: 12px;
+    background: rgba(255,255,255,0.03);
+    color: var(--text);
+    border-radius: 10px;
+    text-decoration: none;
+    transition: all .16s ease;
+    font-size: 1.05rem;
+    border: 1px solid transparent;
+}
+
+.navbar .back-arrow.show {
+    display: inline-flex;
+}
+
+.navbar .back-arrow:hover {
+    transform: translateY(-2px);
+    background: rgba(255,255,255,0.06);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.28);
+}
+
+.navbar .links {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.links a {
+    margin: 0 6px;
+    padding: 6px 8px;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: bold;
+    transition: 0.3s;
+    white-space: nowrap;
+}
+
+.links a:hover {
+    color: var(--primary);
+}
+
+/* Container / Card */
+.container {
+    background: var(--surface);
+    border: 1px solid var(--surface-border);
+    width: 320px;
+    margin: 40px auto;
+    padding: 20px;
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    animation: fadeIn 0.5s ease;
+}
+
+/* Buttons */
+button {
+    background: var(--primary);
+    color: var(--text);
+    border: none;
+    padding: 10px 15px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: var(--secondary);
+    box-shadow: 0 0 10px var(--primary-glow);
+}
+
+/* Inputs */
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border: 1px solid var(--surface-border);
+    background: transparent;
+    color: var(--text);
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; }
+}
+
+@media (max-width: 600px) {
+    .navbar .back-arrow { width: 36px; height: 36px; margin-right: 8px; font-size: 0.95rem; }
+    .navbar { padding: 10px 12px; height: 56px; }
+}
