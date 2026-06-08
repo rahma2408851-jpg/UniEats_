@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNIEats - Register</title>
+    <link rel="stylesheet" href="/styles/colors.css">
+    <link rel="stylesheet" href="/styles/app.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="/login" class="back-arrow show" aria-label="Back to Login">←</a>
+        <div class="brand">
+            <div class="logo">UNIEats</div>
+            <span class="badge">Register</span>
+        </div>
+        <div class="links">
+            <a href="/">Home</a>
+            <a href="/login">Login</a>
+            <a href="/register" class="active">Register</a>
+        </div>
+    </nav>
+
+    <main class="page-shell">
+        <div class="form-card">
+            <form action="#" method="POST" id="registerForm">
+                <div class="form-eyebrow">Create account</div>
+                <h2 class="form-title">Join<br><em>UNIEats.</em></h2>
+                <p class="form-sub">Fill in your details below. Takes less than a minute.</p>
+
+                <div class="input-group">
+                    <div class="input-header">
+                        <label for="username">Username</label>
+                        <span id="usernameCounter">0/20</span>
+                    </div>
+                    <input type="text" name="username" id="username" placeholder="Choose a username" required>
+                </div>
+
+                <div class="input-group">
+                    <div class="input-header"><label for="email">Email Address</label></div>
+                    <input type="email" name="email" id="email" placeholder="name@example.com" required>
+                </div>
+
+                <div class="input-group">
+                    <div class="input-header"><label for="password">Password</label></div>
+                    <input type="password" name="password" id="password" placeholder="Create a secure password" required>
+                </div>
+
+                <div class="input-group">
+                    <div class="input-header"><label for="confirm">Confirm Password</label></div>
+                    <input type="password" name="confirm" id="confirm" placeholder="Repeat your password" required>
+                </div>
+
+                <div class="input-group">
+                    <div class="input-header"><label for="mnumber">Mobile Number</label></div>
+                    <input type="tel" name="mnumber" id="mnumber" placeholder="Numbers only" pattern="[0-9]+" title="Mobile number must contain numbers only." required>
+                </div>
+
+                <div class="input-group">
+                    <div class="input-header"><label for="bdate">Birth Date</label></div>
+                    <input type="date" name="bdate" id="bdate" min="1906-01-01" max="2013-01-01" required>
+                </div>
+
+                <button type="submit" id="submitBtn">Create Account</button>
+
+                <div class="auth-links">
+                    <p>Already have an account? <a href="/login">Login here</a></p>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    
+    <script src="/script/app.js"></script>
+</body>
+</html>
