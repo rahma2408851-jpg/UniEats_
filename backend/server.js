@@ -87,6 +87,8 @@ connectDB().then(() => {
   // ─────────────────────────────────────────────
 
   app.use(express.static(path.join(__dirname)));
+  // Serve root-level script/ and styles/ directories (JS/CSS assets)
+  app.use(express.static(path.join(__dirname, '..')));
   // Serve uploaded files (menu images, profile pictures)
   app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 
