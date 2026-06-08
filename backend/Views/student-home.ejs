@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UNIEats — Home</title>
+  <link rel="stylesheet" href="/styles/colors.css">
+  <link rel="stylesheet" href="/styles/student.css">
+  <style>
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 6px;
+      z-index: 1001;
+    }
+    .nav-hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--text);
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    @media (max-width: 768px) {
+      .nav-hamburger { display: flex; }
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--surface);
+        border-bottom: 1px solid var(--surface-border);
+        flex-direction: column;
+        padding: 16px 24px;
+        gap: 16px;
+        z-index: 1000;
+      }
+      .nav-links.open { display: flex; }
+      .nav-links a { font-size: 1rem; padding: 8px 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── NAVBAR ── -->
+  <nav class="navbar" id="navbar">
+    <a href="/student-home" class="nav-logo">UNIEats</a>
+    <button class="nav-hamburger" id="navHamburger" onclick="toggleNav()" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-links" id="navLinks">
+      <a href="/student-home" class="active">Home</a>
+      <a href="/profile">Profile</a>
+      <a href="/orders">My Orders</a>
+      <a href="/cart" class="nav-cart-btn">
+        🛒 Cart
+        <span class="cart-badge" id="cartBadge" style="display:none">0</span>
+      </a>
+      <a href="#" class="nav-logout" onclick="confirmLogout(event)">Logout</a>
+    </div>
+  </nav>
+
+  <div class="sh-page">
+
+    <!-- ── HERO ── -->
+    <div class="sh-hero">
+      <div class="sh-hero-left">
+        <div class="sh-eyebrow">Campus Dining — 2026</div>
+        <h1 class="sh-title" id="greeting-headline">
+          Good evening,<br><em>welcome back.</em>
+        </h1>
+        <p class="sh-sub" id="greeting-sub">
+          Find the best food on campus and skip the line.
+        </p>
+        <div class="sh-search">
+          <input id="restaurant-search" type="text" placeholder="Search restaurants or dishes…">
+          <button id="search-button" type="button">Search</button>
+        </div>
+      </div>
+
+      <div class="sh-hero-right">
+        <div class="sh-gloss-orb"></div>
+        <div class="sh-hero-stat">
+          <span class="sh-stat-num">5</span>
+          <span class="sh-stat-label">Restaurants on campus</span>
+        </div>
+        <div class="sh-hero-stat">
+          <span class="sh-stat-num">15m</span>
+          <span class="sh-stat-label">Avg. delivery time</span>
+        </div>
+        <div class="sh-hero-stat">
+          <span class="sh-stat-num">4.9★</span>
+          <span class="sh-stat-label">Average rating</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── MARQUEE BAND ── -->
+    <div class="sh-marquee" aria-hidden="true">
+      <div class="sh-marquee-inner">
+        <span class="sh-marquee-item">Campus Dining</span><span class="sh-marquee-dot">·</span>
+        <span class="sh-marquee-item">Skip The Queue</span><span class="sh-marquee-dot">·</span>
+        <span class="sh-marquee-item">Fresh Every Day</span><span class="sh-marquee-dot">·</span>
+        <span class="sh-marquee-item">Order Ahead</span><span class="sh-marquee-dot">·</span>
+        <span class="sh-marquee-item">5 Restaurants</span><span class="sh-marquee-dot">·</span>
+        <span class="sh-marquee-item">Premium Picks</span><span class="sh-marquee-dot">·</span>
+        <span class="sh-marquee-item">Campus Dining</span><span class="sh-marquee-dot">·</span>
+        <span class="sh-marquee-item">Skip The Queue</span><span class="sh-marquee-dot">·</span>
+        <span class="sh-marquee-item">Fresh Every Day</span><span class="sh-marquee-dot">·</span>
+        <span class="sh-marquee-item">Order Ahead</span><span class="sh-marquee-dot">·</span>
+        <span class="sh-marquee-item">5 Restaurants</span><span class="sh-marquee-dot">·</span>
+        <span class="sh-marquee-item">Premium Picks</span><span class="sh-marquee-dot">·</span>
+      </div>
+    </div>
+
+    <!-- ── TRENDING ── -->
+    <div class="sh-section">
+      <div class="sh-section-header">
+        <div>
+          <div class="sh-section-eyebrow">This week</div>
+          <h2 class="sh-section-title">Trending <em>Meals</em></h2>
+        </div>
+      </div>
+      <div id="trending-container">
+        <div class="sh-trending-grid">
+          <div class="sh-skel"></div>
+          <div class="sh-skel"></div>
+          <div class="sh-skel"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── RESTAURANTS ── -->
+    <div class="sh-section">
+      <div class="sh-section-header">
+        <div>
+          <div class="sh-section-eyebrow">On campus</div>
+          <h2 class="sh-section-title">Available <em>Restaurants</em></h2>
+        </div>
+      </div>
+      <div id="restaurants" class="restaurants-grid"></div>
+    </div>
+
+    <!-- ── EDITORIAL STRIP ── -->
+    <div class="sh-editorial">
+      <div class="sh-editorial-left">
+        <div class="sh-editorial-kicker">Loyalty Rewards</div>
+        <h2 class="sh-editorial-title">Order more,<br><em>earn more.</em></h2>
+        <p class="sh-editorial-body">
+          Every order earns you points toward free meals, exclusive discounts,
+          and early access to new restaurants landing on campus.
+        </p>
+        <a href="#" class="sh-editorial-btn">Join the Program →</a>
+      </div>
+      <div class="sh-editorial-right">
+        <div class="sh-editorial-cell">★</div>
+        <div class="sh-editorial-cell accent">✦</div>
+        <div class="sh-editorial-cell accent">◈</div>
+        <div class="sh-editorial-cell">★</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── FOOTER ── -->
+  <footer class="sh-footer">
+    <a href="/student-home" class="sh-footer-logo">UNIEats</a>
+    <span class="sh-footer-copy">Campus Dining Platform · 2026</span>
+  </footer>
+
+  <div id="toast-container"></div>
+
+  <script src="/script/all-student.js" defer></script>
+  <script>
+    /* ── Navbar scroll ── */
+    window.addEventListener('scroll', () => {
+      document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 20);
+    });
+
+    /* ── Cart badge ── */
+    function updateCartBadge() {
+      const cart  = JSON.parse(localStorage.getItem('cart') || '[]');
+      const count = cart.reduce((s, i) => s + (i.quantity || 1), 0);
+      const badge = document.getElementById('cartBadge');
+      if (badge) {
+        badge.textContent = count;
+        badge.style.display = count > 0 ? 'flex' : 'none';
+      }
+    }
+    updateCartBadge();
+
+    /* ── Greeting ── */
+    function initGreeting() {
+      const name = localStorage.getItem('userName') || '';
+      const hour = new Date().getHours();
+      let label, sub;
+      if (hour >= 5 && hour < 12) {
+        label = 'Good morning';
+        sub   = 'Start your day with something extraordinary.';
+      } else if (hour >= 12 && hour < 17) {
+        label = 'Good afternoon';
+        sub   = 'Lunch hour — skip the queue and order ahead.';
+      } else {
+        label = 'Good evening';
+        sub   = 'Evening indulgence — treat yourself tonight.';
+      }
+      const first = name.split(' ')[0];
+      const el    = document.getElementById('greeting-headline');
+      if (el) el.innerHTML = first
+        ? `${label}, <em>${first}.</em>`
+        : `${label},<br><em>welcome back.</em>`;
+      const subEl = document.getElementById('greeting-sub');
+      if (subEl) subEl.textContent = sub;
+    }
+
+    /* ── Trending ── */
+    async function loadTrending() {
+      const container = document.getElementById('trending-container');
+      try {
+        const res  = await fetch('/api/orders/trending');
+        const data = await res.json();
+        if (!Array.isArray(data) || data.length === 0) {
+          container.innerHTML = '<p class="sh-empty">No order data yet — be the first to order!</p>';
+          return;
+        }
+        const max = data[0].count;
+        container.innerHTML = `<div class="sh-trending-grid">${
+          data.map((item, i) => `
+            <div class="sh-trending-card">
+              <span class="sh-trank">0${i + 1}</span>
+              <div class="sh-tinfo">
+                <div class="sh-tname">${item.name}</div>
+                <div class="sh-tcount">${item.count} order${item.count !== 1 ? 's' : ''} this week</div>
+                <div class="sh-tbar-wrap">
+                  <div class="sh-tbar" style="width:${Math.round((item.count / max) * 100)}%"></div>
+                </div>
+              </div>
+            </div>`).join('')
+        }</div>`;
+      } catch {
+        container.innerHTML = '<p class="sh-empty">No trending data yet.</p>';
+      }
+    }
+
+    /* ── Search — filters restaurants on same page ── */
+    function doSearch() {
+      const q = document.getElementById('restaurant-search').value.trim().toLowerCase();
+      if (!q) {
+        if (typeof loadRestaurantsFromBackend === 'function') loadRestaurantsFromBackend();
+        return;
+      }
+      document.getElementById('restaurants').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (typeof searchRestaurants === 'function') searchRestaurants();
+    }
+
+    document.getElementById('search-button').addEventListener('click', doSearch);
+    document.getElementById('restaurant-search').addEventListener('keydown', e => {
+      if (e.key === 'Enter') doSearch();
+    });
+/* ── Hamburger menu ── */
+    function toggleNav() {
+      document.getElementById('navLinks').classList.toggle('open');
+      document.getElementById('navHamburger').classList.toggle('open');
+    }
+    // Close menu when a link is clicked
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', () => {
+        document.getElementById('navLinks').classList.remove('open');
+        document.getElementById('navHamburger').classList.remove('open');
+      });
+    });
+    initGreeting();
+    loadTrending();
+  </script>
+</body>
+</html>
