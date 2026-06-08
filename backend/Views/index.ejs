@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNIEats — Campus Dining</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles/colors.css">
+    <link rel="stylesheet" href="/styles/index.css">
+</head>
+<body>
+
+    <nav class="navbar" id="navbar">
+        <div class="nav-logo">UNIEats</div>
+        <div class="nav-links">
+            <a href="/index" class="nav-link active">Home</a>
+            <a href="/login" class="nav-link">Login</a>
+            <a href="/register" class="nav-btn">Get Started</a>
+        </div>
+    </nav>
+
+    <main>
+        <section class="hero">
+            <div class="hero-left">
+                <div class="hero-eyebrow">Campus Collection — 2026</div>
+                <h1 class="hero-title">
+                    <span class="title-line">Eat</span>
+                    <span class="title-line italic">Bold.</span>
+                    <span class="title-line">Live <em>Well.</em></span>
+                </h1>
+                <p class="hero-sub">Premium dining delivered to your campus doorstep. Order from the finest university restaurants — effortlessly.</p>
+                <div class="hero-actions">
+                    <a href="/register" class="btn-magnetic btn-red" data-magnetic>
+                        <span>Order Now</span>
+                        <div class="btn-shine"></div>
+                    </a>
+                    <a href="/login" class="btn-magnetic btn-ghost" data-magnetic>
+                        <span>Sign In</span>
+                    </a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat"><span class="stat-num">40+</span><span class="stat-label">Restaurants</span></div>
+                    <div class="stat-divider"></div>
+                    <div class="stat"><span class="stat-num">12k</span><span class="stat-label">Students</span></div>
+                    <div class="stat-divider"></div>
+                    <div class="stat"><span class="stat-num">4.9★</span><span class="stat-label">Rating</span></div>
+                </div>
+            </div>
+
+            <div class="hero-right" id="heroRight">
+                <div class="hero-visual-wrap">
+                    <div class="visual-glow red-glow"></div>
+                    <div class="visual-glow navy-glow"></div>
+                    <div class="hero-img-container" id="parallaxImg">
+                        <div class="food-hero-img">
+                            <div class="food-illustration">
+                                <div class="hotdog-wrap">
+                                    <div class="bun-top"></div>
+                                    <div class="sausage"></div>
+                                    <div class="sauce-container">
+                                        <div class="sauce-drizzle s1"></div>
+                                        <div class="sauce-drizzle s2"></div>
+                                        <div class="sauce-drizzle s3"></div>
+                                    </div>
+                                    <div class="bun-bottom"></div>
+                                    <div class="shine-overlay"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="floating-tag tag-1"><span class="tag-dot red"></span>Campus Pick</div>
+                    <div class="floating-tag tag-2"><span class="tag-dot navy"></span>15 min delivery</div>
+                    <div class="campaign-label">AMERICAN<br>SUMMER.</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="marquee-strip">
+            <div class="marquee-track">
+                <span>Campus Dining</span><span class="dot">·</span>
+                <span>Premium Quality</span><span class="dot">·</span>
+                <span>Fast Delivery</span><span class="dot">·</span>
+                <span>Student Exclusive</span><span class="dot">·</span>
+                <span>Fresh Daily</span><span class="dot">·</span>
+                <span>Campus Dining</span><span class="dot">·</span>
+                <span>Premium Quality</span><span class="dot">·</span>
+                <span>Fast Delivery</span><span class="dot">·</span>
+                <span>Student Exclusive</span><span class="dot">·</span>
+                <span>Fresh Daily</span><span class="dot">·</span>
+            </div>
+        </section>
+
+        <section class="editorial-grid">
+            <div class="editorial-header">
+                <span class="section-tag">Why UNIEats</span>
+                <h2>Dining, <em>redefined.</em></h2>
+            </div>
+            <div class="cards-grid">
+                <div class="ed-card card-red">
+                    <div class="card-num">01</div>
+                    <h3>Curated<br>Restaurants</h3>
+                    <p>Only the finest campus eateries, handpicked for quality and taste.</p>
+                    <div class="card-arrow">→</div>
+                </div>
+                <div class="ed-card card-navy">
+                    <div class="card-num">02</div>
+                    <h3>Lightning<br>Fast</h3>
+                    <p>Average delivery in under 15 minutes. Your food, hot and fresh.</p>
+                    <div class="card-arrow">→</div>
+                </div>
+                <div class="ed-card card-cream">
+                    <div class="card-num">03</div>
+                    <h3>Student<br>Pricing</h3>
+                    <p>Exclusive deals and loyalty rewards built for campus life.</p>
+                    <div class="card-arrow">→</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta-banner">
+            <div class="cta-inner">
+                <div class="cta-text">
+                    <p class="cta-eyebrow">Ready to order?</p>
+                    <h2 class="cta-title">Your campus.<br><em>Your taste.</em></h2>
+                </div>
+                <a href="/register" class="btn-magnetic btn-red btn-large" data-magnetic>
+                    <span>Join UNIEats</span>
+                    <div class="btn-shine"></div>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-logo">UNIEats</div>
+        <p class="footer-copy">© 2026 UNIEats. All rights reserved.</p>
+    </footer>
+
+    <script>
+    // ── Navbar scroll ──
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => navbar.classList.toggle('scrolled', window.scrollY > 40));
+
+    // ── Parallax hero food ──
+    const parallaxImg = document.getElementById('parallaxImg');
+    window.addEventListener('scroll', () => {
+        if (parallaxImg) parallaxImg.style.transform = `translateY(${window.scrollY * 0.18}px)`;
+    });
+
+    // ── Magnetic buttons ──
+    document.querySelectorAll('[data-magnetic]').forEach(btn => {
+        btn.addEventListener('mousemove', e => {
+            const r = btn.getBoundingClientRect();
+            const dx = (e.clientX - (r.left + r.width / 2)) * 0.28;
+            const dy = (e.clientY - (r.top + r.height / 2)) * 0.28;
+            btn.style.transform = `translate(${dx}px,${dy}px)`;
+        });
+        btn.addEventListener('mouseleave', () => btn.style.transform = 'translate(0,0)');
+    });
+
+    // ── Staggered entrance ──
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.ed-card, .hero-stats, .cta-banner').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
